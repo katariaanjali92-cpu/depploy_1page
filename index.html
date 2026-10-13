@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WorkFlow Dashboard</title>
+    <style>
+      :root {
+        --bg: #f4f7fb;
+        --panel: #ffffff;
+        --panel-alt: #eff5ff;
+        --line: #dfe8f6;
+        --text: #1d2433;
+        --muted: #66758f;
+        --primary: #3f6df5;
+        --primary-strong: #2a4fca;
+        --secondary: #63d7c3;
+        --success: #34b87c;
+        --warning: #f6b949;
+        --danger: #ee5a5a;
+        --shadow: 0 16px 40px rgba(18, 31, 58, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        background: linear-gradient(180deg, #edf4ff 0%, #f7f9fc 100%);
+        color: var(--text);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button {
+        font: inherit;
+      }
+
+      .container {
+        width: min(1200px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        background: rgba(255,255,255,0.72);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--line);
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 76px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+      }
+
+      .logo {
+        width: 40px;
+        height: 40px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        color: #fff;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        box-shadow: 0 12px 24px rgba(63,109,245,0.28);
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        color: var(--muted);
+      }
+
+      .nav-links a:hover {
+        color: var(--text);
+      }
+
+      .nav-actions {
+        display: flex;
+        gap: 12px;
+      }
+
+      .btn {
+        border: none;
+        border-radius: 12px;
+        padding: 12px 18px;
+        cursor: pointer;
+        font-weight: 700;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+        color: #fff;
+        box-shadow: 0 12px 22px rgba(63,109,245,0.24);
+      }
+
+      .btn-light {
+        background: #edf3ff;
+        color: var(--primary-strong);
+      }
+
+      .hero {
+        padding: 56px 0 26px;
+      }
+
+      .hero-wrap {
+        display: grid;
+        grid-template-columns: 1.25fr 0.75fr;
+        gap: 30px;
+        align-items: center;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: #edf2ff;
+        color: var(--primary-strong);
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 20px 0 16px;
+        font-size: clamp(2.5rem, 5vw, 4.6rem);
+        line-height: 0.96;
+        letter-spacing: -0.06em;
+      }
+
+      .lead {
+        margin: 0;
+        color: var(--muted);
+        max-width: 620px;
+        line-height: 1.8;
+        font-size: 1.08rem;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-top: 28px;
+      }
+
+      .proof {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-top: 28px;
+        color: var(--muted);
+      }
+
+      .proof-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .proof-bullet {
+        width: 10px;
+        height: 10px;
+        background: var(--success);
+        border-radius: 50%;
+        box-shadow: 0 0 0 4px rgba(52,184,124,0.12);
+      }
+
+      .dashboard {
+        background: linear-gradient(180deg, #1e2e4f 0%, #171f2f 100%);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 28px;
+        padding: 22px;
+        color: white;
+        box-shadow: 0 26px 50px rgba(20, 27, 45, 0.2);
+      }
+
+      .chart-box {
+        position: relative;
+        background: rgba(255,255,255,0.03);
+        border-radius: 22px;
+        border: 1px solid rgba(255,255,255,0.08);
+        padding: 14px;
+        height: 270px;
+        overflow: hidden;
+      }
+
+      .chart-grid {
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+        background-size: 34px 34px;
+      }
+
+      svg {
+        position: absolute;
+        inset: 14px;
+        width: calc(100% - 28px);
+        height: calc(100% - 28px);
+      }
+
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 18px;
+      }
+
+      .stat-card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 16px;
+        padding: 16px 14px;
+      }
+
+      .stat-card strong {
+        display: block;
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+      }
+
+      .stat-card span {
+        color: rgba(255,255,255,0.7);
+        font-size: 0.78rem;
+      }
+
+      .section {
+        padding: 84px 0;
+      }
+
+      .heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 18px;
+        margin-bottom: 28px;
+      }
+
+      .heading h2 {
+        margin: 0;
+        font-size: clamp(2rem, 3vw, 3rem);
+        letter-spacing: -0.05em;
+      }
+
+      .heading p {
+        margin: 0;
+        color: var(--muted);
+        max-width: 560px;
+        line-height: 1.7;
+      }
+
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 22px;
+      }
+
+      .feature-card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 26px 22px;
+        box-shadow: var(--shadow);
+      }
+
+      .feature-icon {
+        width: 52px;
+        height: 52px;
+        display: grid;
+        place-items: center;
+        border-radius: 16px;
+        background: linear-gradient(135deg, rgba(63,109,245,0.14), rgba(99,215,195,0.18));
+        font-size: 1.4rem;
+        margin-bottom: 18px;
+      }
+
+      .feature-card h3 {
+        margin: 0 0 10px;
+        font-size: 1.2rem;
+      }
+
+      .feature-card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 26px;
+      }
+
+      .metric {
+        background: rgba(255,255,255,0.6);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 18px 16px;
+        text-align: center;
+      }
+
+      .metric strong {
+        display: block;
+        font-size: 2rem;
+        margin-bottom: 8px;
+      }
+
+      .metric span {
+        color: var(--muted);
+      }
+
+      .cta {
+        padding: 40px 0 100px;
+      }
+
+      .cta-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 26px;
+        padding: 32px 34px;
+        background: linear-gradient(135deg, rgba(63,109,245,0.12), rgba(99,215,195,0.12));
+        border: 1px solid rgba(63,109,245,0.15);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+      }
+
+      .cta-box h3 {
+        margin: 0 0 8px;
+        font-size: clamp(1.8rem, 2vw, 2.6rem);
+        letter-spacing: -0.05em;
+      }
+
+      .cta-box p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 18px 0 52px;
+        color: var(--muted);
+      }
+
+      .footer-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      @media (max-width: 920px) {
+        .hero-wrap, .card-grid, .metrics {
+          grid-template-columns: 1fr;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .heading, .cta-box, .footer-row {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .nav-actions {
+          display: none;
+        }
+
+        .hero {
+          padding-top: 30px;
+        }
+
+        .stats-row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container nav">
+        <div class="brand">
+          <div class="logo">W</div>
+          <span>WorkFlow</span>
+        </div>
+
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="#features">Features</a>
+          <a href="#insights">Insights</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#resources">Resources</a>
+        </nav>
+
+        <div class="nav-actions">
+          <button class="btn btn-light">Log in</button>
+          <button class="btn btn-primary">Get started</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-wrap">
+          <div>
+            <span class="eyebrow">Built for delivering more</span>
+            <h1>Plan work. Assign clearly. Move faster.</h1>
+            <p class="lead">
+              Keep every task visible, assign ownership with confidence, and turn team effort into measurable results.
+            </p>
+
+            <div class="hero-actions">
+              <button class="btn btn-primary">Create task</button>
+              <button class="btn btn-light">Watch demo</button>
+            </div>
+
+            <div class="proof">
+              <div class="proof-item"><span class="proof-bullet"></span> Trusted by 8,000+ teams</div>
+              <div class="proof-item"><span class="proof-bullet"></span> 4.9/5 satisfaction</div>
+            </div>
+          </div>
+
+          <div class="dashboard" aria-label="Dashboard preview">
+            <div class="chart-box">
+              <div class="chart-grid"></div>
+              <svg viewBox="0 0 420 220" role="img" aria-label="Performance chart">
+                <defs>
+                  <linearGradient id="lineGradient" x1="0" x2="1">
+                    <stop offset="0%" stop-color="#66d7c7"/>
+                    <stop offset="100%" stop-color="#7ca4ff"/>
+                  </linearGradient>
+                </defs>
+                <path d="M0 170 C30 150, 80 150, 105 115 S180 60, 220 100 S290 60, 335 92 S390 40, 420 78 L420 220 L0 220 Z" fill="rgba(124, 156, 255, 0.16)"/>
+                <path d="M0 170 C30 150, 80 150, 105 115 S180 60, 220 100 S290 60, 335 92 S390 40, 420 78" fill="none" stroke="url(#lineGradient)" stroke-width="5" stroke-linecap="round"/>
+                <circle cx="335" cy="92" r="7" fill="#63d7c3"/>
+                <circle cx="420" cy="78" r="7" fill="#ffd678"/>
+              </svg>
+            </div>
+
+            <div class="stats-row">
+              <div class="stat-card">
+                <strong>+128%</strong>
+                <span>Productivity</span>
+              </div>
+              <div class="stat-card">
+                <strong>3.4x</strong>
+                <span>Faster execution</span>
+              </div>
+              <div class="stat-card">
+                <strong>92%</strong>
+                <span>On-time delivery</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="features">
+        <div class="container">
+          <div class="heading">
+            <h2>Everything your team needs to stay aligned.</h2>
+            <p>Workflow helps teams assign responsibilities, clarify priorities, and keep momentum high across every project stage.</p>
+          </div>
+
+          <div class="card-grid">
+            <article class="feature-card">
+              <div class="feature-icon">⚡</div>
+              <h3>Smart task assignment</h3>
+              <p>Distribute work based on capacity, skills, and urgency so every assignment is balanced and accountable.</p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">📊</div>
+              <h3>Live project insights</h3>
+              <p>Keep a real-time view of progress, blockers, and performance with dashboards built for action.</p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">🤝</div>
+              <h3>Team alignment</h3>
+              <p>Share context, priorities, and deadlines in one place so teams move with confidence and clarity.</p>
+            </article>
+          </div>
+
+          <div class="metrics" id="insights">
+            <div class="metric">
+              <strong>18h</strong>
+              <span>Saved weekly</span>
+            </div>
+            <div class="metric">
+              <strong>31%</strong>
+              <span>More output</span>
+            </div>
+            <div class="metric">
+              <strong>2.8x</strong>
+              <span>Clearer visibility</span>
+            </div>
+            <div class="metric">
+              <strong>24/7</strong>
+              <span>Stakeholder clarity</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta" id="pricing">
+        <div class="container">
+          <div class="cta-box">
+            <div>
+              <h3>Ready to organize your next big project?</h3>
+              <p>See how WorkFlow helps teams assign, track, and deliver with less friction.</p>
+            </div>
+            <button class="btn btn-primary">Book a demo</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer id="resources">
+      <div class="container footer-row">
+        <div class="brand">
+          <div class="logo">W</div>
+          <span>WorkFlow</span>
+        </div>
+        <span>© 2026 WorkFlow. Built for modern teams.</span>
+      </div>
+    </footer>
+  </body>
+</html>
