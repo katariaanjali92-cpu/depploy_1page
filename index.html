@@ -6,19 +6,19 @@
     <title>WorkFlow Dashboard</title>
     <style>
       :root {
-        --bg: #f4f7fb;
+        --bg: #fff5f5;
         --panel: #ffffff;
-        --panel-alt: #eff5ff;
-        --line: #dfe8f6;
+        --panel-alt: #fff0f0;
+        --line: #f5d7d7;
         --text: #1d2433;
-        --muted: #66758f;
-        --primary: #3f6df5;
-        --primary-strong: #2a4fca;
-        --secondary: #63d7c3;
-        --success: #34b87c;
+        --muted: #6d5863;
+        --primary: #e54848;
+        --primary-strong: #b92929;
+        --secondary: #ff8a8a;
+        --success: #e85d5d;
         --warning: #f6b949;
         --danger: #ee5a5a;
-        --shadow: 0 16px 40px rgba(18, 31, 58, 0.08);
+        --shadow: 0 16px 40px rgba(70, 21, 21, 0.08);
       }
 
       * {
@@ -32,7 +32,7 @@
       body {
         margin: 0;
         font-family: "Segoe UI", Tahoma, sans-serif;
-        background: linear-gradient(180deg, #edf4ff 0%, #f7f9fc 100%);
+        background: linear-gradient(180deg, #fff1f1 0%, #fffaf9 100%);
         color: var(--text);
       }
 
@@ -83,7 +83,7 @@
         font-weight: 800;
         color: #fff;
         background: linear-gradient(135deg, var(--primary), var(--secondary));
-        box-shadow: 0 12px 24px rgba(63,109,245,0.28);
+        box-shadow: 0 12px 24px rgba(229, 73, 73, 0.28);
       }
 
       .nav-links {
@@ -118,11 +118,11 @@
       .btn-primary {
         background: linear-gradient(135deg, var(--primary), var(--primary-strong));
         color: #fff;
-        box-shadow: 0 12px 22px rgba(63,109,245,0.24);
+        box-shadow: 0 12px 22px rgba(229, 73, 73, 0.24);
       }
 
       .btn-light {
-        background: #edf3ff;
+        background: #ffe7e7;
         color: var(--primary-strong);
       }
 
@@ -142,7 +142,7 @@
         align-items: center;
         padding: 8px 12px;
         border-radius: 999px;
-        background: #edf2ff;
+        background: #fff0f0;
         color: var(--primary-strong);
         font-size: 0.75rem;
         font-weight: 800;
@@ -191,16 +191,16 @@
         height: 10px;
         background: var(--success);
         border-radius: 50%;
-        box-shadow: 0 0 0 4px rgba(52,184,124,0.12);
+        box-shadow: 0 0 0 4px rgba(232, 93, 93, 0.12);
       }
 
       .dashboard {
-        background: linear-gradient(180deg, #1e2e4f 0%, #171f2f 100%);
-        border: 1px solid rgba(255,255,255,0.1);
+        background: linear-gradient(180deg, #2b1618 0%, #130d0f 100%);
+        border: 1px solid rgba(255,255,255,0.08);
         border-radius: 28px;
         padding: 22px;
         color: white;
-        box-shadow: 0 26px 50px rgba(20, 27, 45, 0.2);
+        box-shadow: 0 26px 50px rgba(55, 19, 19, 0.2);
       }
 
       .chart-box {
@@ -298,7 +298,7 @@
         display: grid;
         place-items: center;
         border-radius: 16px;
-        background: linear-gradient(135deg, rgba(63,109,245,0.14), rgba(99,215,195,0.18));
+        background: linear-gradient(135deg, rgba(229, 73, 73, 0.14), rgba(255, 138, 138, 0.18));
         font-size: 1.4rem;
         margin-bottom: 18px;
       }
@@ -349,8 +349,8 @@
         align-items: center;
         gap: 26px;
         padding: 32px 34px;
-        background: linear-gradient(135deg, rgba(63,109,245,0.12), rgba(99,215,195,0.12));
-        border: 1px solid rgba(63,109,245,0.15);
+        background: linear-gradient(135deg, rgba(229, 73, 73, 0.12), rgba(255, 138, 138, 0.12));
+        border: 1px solid rgba(181, 38, 38, 0.15);
         border-radius: 28px;
         box-shadow: var(--shadow);
       }
